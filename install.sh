@@ -81,21 +81,21 @@ build_port_audio() {
 }
 
 get_platform() {
-  uname_str=`uname -a`
+  uname_str=$(uname -a)
   result=""
 
-  if [[ "$uname_str" ==  "Linux "* ]] && [[ -f /etc/os-release ]]
-  then
-    sys_id=`cat /etc/os-release | grep "^ID="`
-    if [[ "$sys_id" == "ID=raspbian" ]]
-    then
+  if [[ "$uname_str" ==  "Linux "* ]] && [[ -f /etc/os-release ]]; then
+    sys_id=$(cat /etc/os-release | grep "^ID=")
+    if [[ "$sys_id" == "ID=raspbian" ]]; then
       echo "Raspberry pi"
+    else
+      echo "Linux"  # Add this line or handle other Linux distributions if needed
     fi
-  elif [[ "$uname_str" ==  "MINGW64"* ]]
-  then
+  elif [[ "$uname_str" ==  "MINGW64"* ]]; then
     echo "Windows mingw64"
   fi
 }
+
 
 show_help() {
   echo  'Usage: setup.sh <config-json-file> [OPTIONS]'
