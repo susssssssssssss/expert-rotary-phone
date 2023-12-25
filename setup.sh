@@ -81,21 +81,27 @@ build_port_audio() {
 }
 
 get_platform() {
-  uname_str=$(uname -a)
-  result=""
+    uname_str=$(uname -a)
+    result=""
 
-  if [[ "$uname_str" ==  "Linux "* ]] && [[ -f /etc/os-release ]]; then
-    sys_id=$(cat /etc/os-release | grep "^ID=")
-    if [[ "$sys_id" == "ID=raspbian" ]]; then
-      echo "Raspberry pi"
-    else
-      echo "Linux"  # Add this line or handle other Linux distributions if needed
+    if [[ "$uname_str" ==  "Linux "* ]] && [[ -f /etc/os-release ]]; then
+        sys_id=$(cat /etc/os-release | grep "^ID=")
+        version=$(cat /etc/os-release | grep "^VERSION_ID=")
+        if [[ "$sys_id" == "ID=raspbian" ]]; then
+            echo "Raspberry pi"
+        elif [[ "$sys_id" == "ID=debian" ]]; then
+            if [[ "$version" == "VERSION_ID=\"11\"" ]]; then
+                echo "Debian 11"
+            else
+                echo "Debian"  # Adjust this if your system is based on Debian but not version 11
+            fi
+        else
+            echo "Linux"
+        fi
+    elif [[ "$uname_str" ==  "MINGW64"* ]]; then
+        echo "Windows mingw64"
     fi
-  elif [[ "$uname_str" ==  "MINGW64"* ]]; then
-    echo "Windows mingw64"
-  fi
 }
-
 
 show_help() {
   echo  'Usage: setup.sh <config-json-file> [OPTIONS]'
